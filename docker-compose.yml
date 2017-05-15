@@ -1,0 +1,46 @@
+version: '2'
+
+networks:
+  lb_web:
+    external: true
+  back:
+    driver: bridge
+services:
+  hackmdPostgres:
+    image: postgres
+    environment:
+      - POSTGRES_USER=hackmd
+      - POSTGRES_DB=hackmd
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    networks:
+      - back
+  hackmd:
+    image: hackmdio/hackmd:0.5.1
+    env_file:
+      - ./env
+    environment:
+      - POSTGRES_USER=hackmd
+      - HMD_EMAIL=true
+      - HMD_ALLOW_EMAIL_REGISTER=false
+      - HMD_IMAGE_UPLOAD_TYPE=filesystem
+      - VIRTUAL_HOST
+    volumes:
+      - ./config/config.json:/hackmd/config.json
+    links:
+      - hackmdPostgres:hackmdPostgres
+    networks:
+      - back
+  web:
+    image: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    links:
+      - hackmd
+    volumes_from:
+      - hackmd
+    environment:
+      - VIRTUAL_HOST
+    networks:
+    - back
+    - lb_web
