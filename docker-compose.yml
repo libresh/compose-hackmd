@@ -27,6 +27,7 @@ services:
       - VIRTUAL_HOST
     volumes:
       - ./config/config.json:/hackmd/config.json
+      - ./data:/hackmd/public/uploads
     links:
       - hackmdPostgres:hackmdPostgres
     networks:
