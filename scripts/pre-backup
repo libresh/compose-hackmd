@@ -1,0 +1,3 @@
+#!/bin/bash -eux
+
+docker-compose exec db bash -c 'pg_dump -U hackmd -Fc hackmd' > ./data/dump/dump.sql
