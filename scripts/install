@@ -1,5 +1,16 @@
 #!/bin/bash -eux
 
 POSTGRES_PASSWORD=`tr -dc A-Za-z0-9_ < /dev/urandom | head -c 20 | xargs`
+CMD_DB_URL=postgres://codimd:${POSTGRES_PASSWORD}@db:5432/codimd
 
-echo "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}" > env
+echo "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}" > .env
+echo "POSTGRES_USER=codimd" >> .env
+
+echo "CM_DB_URL=${CMD_DB_URL}" >> .env
+echo "CMD_ALLOW_FREEURL=true" >> .env
+echo "CMD_IMAGE_UPLOAD_TYPE=filesystem" >> .env
+echo "CMD_EMAIL=true" >> .env
+echo "CMD_ALLOW_EMAIL_REGISTER=true" >> .env
+echo "CMD_USECDN=false" >> .env
+echo "POSTGES_VERSION=10.6" >> .env
+echo "CODIMD_VERSION=1.2.1" >> .env
